@@ -1,4 +1,12 @@
 {
   "version": 1,
-  "tasks": []
+  "tasks": [
+    {
+      "id": "c4966299-4c15-45b0-ba26-bba861b5a936",
+      "text": "1С Специалист",
+      "done": false,
+      "priority": "high",
+      "createdAt": 1782732272201
+    }
+  ]
 }
