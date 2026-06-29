@@ -3,24 +3,31 @@
   "tasks": [
     {
       "id": "seed-1",
-      "text": "Создание задач",
+      "text": "�������� �����",
       "done": true,
       "priority": "high",
       "createdAt": 1719600000000
     },
     {
       "id": "seed-2",
-      "text": "Подвязка к прогресс-бару",
+      "text": "�������� � ��������-����",
       "done": true,
       "priority": "high",
       "createdAt": 1719600100000
     },
     {
       "id": "seed-3",
-      "text": "Хранение данных в git (экспорт/импорт tasks.json)",
+      "text": "�������� ������ � git (�������/������ tasks.json)",
       "done": false,
       "priority": "medium",
       "createdAt": 1719600200000
+    },
+    {
+      "id": "writetest",
+      "text": "�������� ������ ����� Worker",
+      "done": false,
+      "priority": "low",
+      "createdAt": 1719600300000
     }
   ]
 }
