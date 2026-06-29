@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — менеджер задач</title>
+  <meta name="description" content="Простой и быстрый менеджер задач с прогресс-баром. Работает офлайн, хранит данные локально." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <div class="brand">
+        <span class="brand__mark">✓</span>
+        <h1 class="brand__name">TaskFlow</h1>
+      </div>
+      <button id="themeToggle" class="icon-btn" type="button" title="Сменить тему" aria-label="Сменить тему">🌙</button>
+    </header>
+
+    <section class="progress" aria-label="Прогресс выполнения">
+      <div class="progress__head">
+        <span class="progress__label">Прогресс</span>
+        <span id="progressPercent" class="progress__percent">0%</span>
+      </div>
+      <div class="progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progressBar" class="progress__fill" style="width:0%"></div>
+      </div>
+      <p id="progressStats" class="progress__stats">Нет задач — добавьте первую!</p>
+    </section>
+
+    <form id="taskForm" class="task-form" autocomplete="off">
+      <input id="taskInput" class="task-form__input" type="text" placeholder="Новая задача…" maxlength="200" required />
+      <select id="prioritySelect" class="task-form__priority" aria-label="Приоритет">
+        <option value="low">Низкий</option>
+        <option value="medium" selected>Средний</option>
+        <option value="high">Высокий</option>
+      </select>
+      <button class="task-form__add" type="submit">Добавить</button>
+    </form>
+
+    <div class="filters" id="filters">
+      <button class="filter is-active" data-filter="all" type="button">Все</button>
+      <button class="filter" data-filter="active" type="button">Активные</button>
+      <button class="filter" data-filter="done" type="button">Выполненные</button>
+      <button class="filter filter--clear" data-action="clear-done" type="button">Очистить выполненные</button>
+    </div>
+
+    <ul id="taskList" class="task-list" aria-live="polite"></ul>
+
+    <p id="emptyState" class="empty-state hidden">Здесь пока пусто. Добавьте задачу выше ↑</p>
+
+    <footer class="app__footer">
+      <span>Данные хранятся в вашем браузере</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
