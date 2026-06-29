@@ -2,6 +2,13 @@
   "version": 1,
   "tasks": [
     {
+      "id": "4fb3eb3a-ed02-452b-a426-9c25cb2095e8",
+      "text": "Прочитать 1c-metadata-tree-book",
+      "done": false,
+      "priority": "low",
+      "createdAt": 1782732778578
+    },
+    {
       "id": "29ce3487-277a-453c-b2c9-2f23550b3aef",
       "text": "Прочитать what-happens-when-click-1c",
       "done": false,
