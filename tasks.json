@@ -2,6 +2,13 @@
   "version": 1,
   "tasks": [
     {
+      "id": "bfea8607-f08e-47d0-8743-77677c439d01",
+      "text": "Прочитать 1c-semantic-reading",
+      "done": false,
+      "priority": "medium",
+      "createdAt": 1782732719920
+    },
+    {
       "id": "b530c55a-46f6-4fe8-99db-9a41f7a3b207",
       "text": "Получение до образования",
       "done": false,
