@@ -5,7 +5,7 @@ const GH_API = "https://api.github.com";
 
 export default {
   async fetch(request, env) {
-    const cors = corsHeaders(env);
+    const cors = corsHeaders(env, request);
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
@@ -39,9 +39,18 @@ export default {
   },
 };
 
-function corsHeaders(env) {
+function corsHeaders(env, request) {
+  // env.ALLOWED_ORIGIN — список через запятую. localhost разрешаем всегда (для разработки).
+  const allowed = (env.ALLOWED_ORIGIN || "*").split(",").map((s) => s.trim());
+  const origin = request.headers.get("Origin") || "";
+  const isLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  let allowOrigin = allowed[0];
+  if (allowed.includes("*")) allowOrigin = "*";
+  else if (allowed.includes(origin) || isLocal) allowOrigin = origin;
+
   return {
-    "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN || "*",
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Vary": "Origin",
     "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Max-Age": "86400",
