@@ -52,8 +52,20 @@
 
     <p id="emptyState" class="empty-state hidden">Здесь пока пусто. Добавьте задачу выше ↑</p>
 
+    <section class="data-bar" aria-label="Хранение данных в git">
+      <div class="data-bar__info">
+        <strong>Данные в git</strong>
+        <span id="dataStatus" class="data-bar__status">—</span>
+      </div>
+      <div class="data-bar__actions">
+        <button id="exportBtn" class="data-btn" type="button" title="Скачать tasks.json для коммита в репозиторий">⬇ Экспорт</button>
+        <button id="importBtn" class="data-btn" type="button" title="Загрузить tasks.json из файла">⬆ Импорт</button>
+        <input id="importFile" type="file" accept="application/json,.json" hidden />
+      </div>
+    </section>
+
     <footer class="app__footer">
-      <span>Данные хранятся в вашем браузере</span>
+      <span>Задачи живут в файле <code>tasks.json</code> в репозитории · экспортируйте и закоммитьте, чтобы сохранить</span>
     </footer>
   </div>
 

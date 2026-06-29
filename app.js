@@ -22,6 +22,10 @@
   const progressStats = document.getElementById("progressStats");
   const progressTrack = progressBar.parentElement;
   const themeToggle = document.getElementById("themeToggle");
+  const exportBtn = document.getElementById("exportBtn");
+  const importBtn = document.getElementById("importBtn");
+  const importFile = document.getElementById("importFile");
+  const dataStatus = document.getElementById("dataStatus");
 
   // --- Persistence ---
   function load() {
@@ -34,6 +38,72 @@
 
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    setDataStatus("Есть несохранённые изменения — экспортируйте в git", true);
+  }
+
+  function setDataStatus(text, dirty) {
+    dataStatus.textContent = text;
+    dataStatus.style.color = dirty ? "var(--prio-medium)" : "var(--text-muted)";
+  }
+
+  // Приводим произвольный объект к валидной задаче.
+  function normalizeTask(raw) {
+    if (!raw || typeof raw.text !== "string") return null;
+    return {
+      id: raw.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())),
+      text: raw.text,
+      done: Boolean(raw.done),
+      priority: ["low", "medium", "high"].includes(raw.priority) ? raw.priority : "medium",
+      createdAt: typeof raw.createdAt === "number" ? raw.createdAt : Date.now(),
+    };
+  }
+
+  // --- Git: экспорт / импорт tasks.json ---
+  function exportTasks() {
+    const payload = JSON.stringify({ version: 1, tasks: tasks }, null, 2);
+    const blob = new Blob([payload], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tasks.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    setDataStatus("Файл tasks.json скачан — закоммитьте его в репозиторий", false);
+  }
+
+  function importTasks(file) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const data = JSON.parse(String(reader.result));
+        const arr = Array.isArray(data) ? data : data.tasks;
+        if (!Array.isArray(arr)) throw new Error("нет массива задач");
+        tasks = arr.map(normalizeTask).filter(Boolean);
+        save();
+        render();
+        setDataStatus(`Импортировано задач: ${tasks.length}`, false);
+      } catch (e) {
+        setDataStatus("Не удалось прочитать файл: " + e.message, true);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Подтягиваем tasks.json из репозитория, если локально пусто.
+  function seedFromRepo() {
+    return fetch("tasks.json", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return false;
+        const arr = Array.isArray(data) ? data : data.tasks;
+        if (!Array.isArray(arr) || arr.length === 0) return false;
+        tasks = arr.map(normalizeTask).filter(Boolean);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        return true;
+      })
+      .catch(() => false);
   }
 
   // --- Mutations ---
@@ -166,6 +236,14 @@
     localStorage.setItem(THEME_KEY, theme);
   }
 
+  exportBtn.addEventListener("click", exportTasks);
+  importBtn.addEventListener("click", () => importFile.click());
+  importFile.addEventListener("change", (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) importTasks(file);
+    e.target.value = "";
+  });
+
   themeToggle.addEventListener("click", () => {
     const next =
       document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -179,5 +257,14 @@
   applyTheme(savedTheme);
 
   load();
-  render();
+  if (tasks.length === 0) {
+    setDataStatus("Загрузка из репозитория…", false);
+    seedFromRepo().then((seeded) => {
+      render();
+      setDataStatus(seeded ? "Загружено из tasks.json" : "Пусто — добавьте задачи и экспортируйте", false);
+    });
+  } else {
+    render();
+    setDataStatus("Загружено из браузера", false);
+  }
 })();

@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "tasks": [
+    {
+      "id": "seed-1",
+      "text": "Создание задач",
+      "done": true,
+      "priority": "high",
+      "createdAt": 1719600000000
+    },
+    {
+      "id": "seed-2",
+      "text": "Подвязка к прогресс-бару",
+      "done": true,
+      "priority": "high",
+      "createdAt": 1719600100000
+    },
+    {
+      "id": "seed-3",
+      "text": "Хранение данных в git (экспорт/импорт tasks.json)",
+      "done": false,
+      "priority": "medium",
+      "createdAt": 1719600200000
+    }
+  ]
+}
