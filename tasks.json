@@ -2,29 +2,22 @@
   "version": 1,
   "tasks": [
     {
-      "id": "dc3e053e-b991-4f90-81e6-10a38be1ac5e",
-      "text": "Задача из браузера → автокоммит",
-      "done": false,
-      "priority": "medium",
-      "createdAt": 1782731212547
-    },
-    {
       "id": "seed-1",
-      "text": "Создание задач",
+      "text": "�������� �����",
       "done": true,
       "priority": "high",
       "createdAt": 1719600000000
     },
     {
       "id": "seed-2",
-      "text": "Подвязка к прогресс-бару",
+      "text": "�������� � ��������-����",
       "done": true,
       "priority": "high",
       "createdAt": 1719600100000
     },
     {
       "id": "seed-3",
-      "text": "Хранение данных в git через Cloudflare Worker",
+      "text": "�������� ������ � git ����� Cloudflare Worker",
       "done": false,
       "priority": "medium",
       "createdAt": 1719600200000
