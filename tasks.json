@@ -1,26 +1,4 @@
 {
   "version": 1,
-  "tasks": [
-    {
-      "id": "seed-1",
-      "text": "�������� �����",
-      "done": true,
-      "priority": "high",
-      "createdAt": 1719600000000
-    },
-    {
-      "id": "seed-2",
-      "text": "�������� � ��������-����",
-      "done": true,
-      "priority": "high",
-      "createdAt": 1719600100000
-    },
-    {
-      "id": "seed-3",
-      "text": "�������� ������ � git ����� Cloudflare Worker",
-      "done": false,
-      "priority": "medium",
-      "createdAt": 1719600200000
-    }
-  ]
+  "tasks": []
 }
