@@ -2,6 +2,13 @@
   "version": 1,
   "tasks": [
     {
+      "id": "aca1578f-6ad5-4f7e-a41b-4245868923d9",
+      "text": "Прочитать 1c-registers-book",
+      "done": false,
+      "priority": "low",
+      "createdAt": 1782732742298
+    },
+    {
       "id": "e367c59a-51a6-4059-82f6-efef2a94bf8d",
       "text": "Прочитать 1c-semantic-reading",
       "done": false,
