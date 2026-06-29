@@ -1,10 +1,19 @@
 /* TaskFlow — простой менеджер задач с прогресс-баром.
- * Данные хранятся в localStorage, без бэкенда. */
+ * Данные хранятся в git: Cloudflare Worker коммитит tasks.json в репозиторий.
+ * localStorage используется как офлайн-кеш; экспорт/импорт — резервный способ. */
 (function () {
   "use strict";
 
   const STORAGE_KEY = "taskflow.tasks.v1";
   const THEME_KEY = "taskflow.theme";
+  const WORKER_KEY = "taskflow.workerUrl";
+
+  // URL Cloudflare Worker'а. Подставляется при деплое; можно переопределить
+  // через localStorage["taskflow.workerUrl"].
+  const WORKER_URL = (localStorage.getItem(WORKER_KEY) || "https://taskflow-worker.nik-mirosh.workers.dev").replace(/\/+$/, "");
+  const workerConfigured = WORKER_URL && WORKER_URL.indexOf("__WORKER") === -1;
+
+  let syncTimer = null;
 
   /** @type {{id:string, text:string, done:boolean, priority:string, createdAt:number}[]} */
   let tasks = [];
@@ -36,14 +45,56 @@
     }
   }
 
+  // Оптимистично кешируем локально и планируем синхронизацию в git.
   function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    setDataStatus("Есть несохранённые изменения — экспортируйте в git", true);
+    if (workerConfigured) {
+      scheduleSync();
+    } else {
+      setDataStatus("Сохранено локально (Worker не настроен)", true);
+    }
   }
 
   function setDataStatus(text, dirty) {
     dataStatus.textContent = text;
     dataStatus.style.color = dirty ? "var(--prio-medium)" : "var(--text-muted)";
+  }
+
+  // --- Синхронизация с Cloudflare Worker (пишет в git) ---
+  // Дебаунс: коммитим через 2с после последнего изменения, чтобы не плодить коммиты.
+  function scheduleSync() {
+    setDataStatus("Изменено — сохраняю в git…", true);
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(syncToWorker, 2000);
+  }
+
+  function syncToWorker() {
+    setDataStatus("Сохранение в git…", false);
+    fetch(WORKER_URL + "/api/tasks", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tasks: tasks }),
+    })
+      .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+      .then(({ ok, d }) => {
+        if (!ok) throw new Error(d && d.error ? d.error : "ошибка запроса");
+        setDataStatus("✓ Сохранено в git " + new Date().toLocaleTimeString(), false);
+      })
+      .catch((e) => {
+        setDataStatus("⚠ Не удалось записать в git (сохранено локально): " + e.message, true);
+      });
+  }
+
+  function loadFromWorker() {
+    return fetch(WORKER_URL + "/api/tasks", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data || !Array.isArray(data.tasks)) return false;
+        tasks = data.tasks.map(normalizeTask).filter(Boolean);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        return true;
+      })
+      .catch(() => false);
   }
 
   // Приводим произвольный объект к валидной задаче.
@@ -257,14 +308,19 @@
   applyTheme(savedTheme);
 
   load();
-  if (tasks.length === 0) {
+  render(); // мгновенно показываем кеш, пока грузим свежие данные
+
+  if (workerConfigured) {
+    setDataStatus("Загрузка из git…", false);
+    loadFromWorker().then((ok) => {
+      render();
+      setDataStatus(ok ? "Загружено из git ✓" : "git недоступен — показан локальный кеш", !ok);
+    });
+  } else {
     setDataStatus("Загрузка из репозитория…", false);
     seedFromRepo().then((seeded) => {
       render();
-      setDataStatus(seeded ? "Загружено из tasks.json" : "Пусто — добавьте задачи и экспортируйте", false);
+      setDataStatus(seeded ? "Загружено из tasks.json" : "Готово к работе", false);
     });
-  } else {
-    render();
-    setDataStatus("Загружено из браузера", false);
   }
 })();

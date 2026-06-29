@@ -1,0 +1,15 @@
+name = "taskflow-worker"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Параметры репозитория, в который Worker коммитит tasks.json.
+[vars]
+REPO_OWNER = "Malliol"
+REPO_NAME = "taskflow"
+BRANCH = "main"
+FILE_PATH = "tasks.json"
+# Откуда разрешено обращаться к Worker'у (CORS). "*" — с любого origin.
+ALLOWED_ORIGIN = "https://malliol.github.io"
+
+# Секрет GITHUB_TOKEN задаётся отдельно командой:
+#   wrangler secret put GITHUB_TOKEN
