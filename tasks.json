@@ -2,6 +2,13 @@
   "version": 1,
   "tasks": [
     {
+      "id": "b530c55a-46f6-4fe8-99db-9a41f7a3b207",
+      "text": "Получение до образования",
+      "done": false,
+      "priority": "medium",
+      "createdAt": 1782732646155
+    },
+    {
       "id": "c4966299-4c15-45b0-ba26-bba861b5a936",
       "text": "1С Специалист",
       "done": false,
