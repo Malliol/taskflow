@@ -2,6 +2,13 @@
   "version": 1,
   "tasks": [
     {
+      "id": "29ce3487-277a-453c-b2c9-2f23550b3aef",
+      "text": "Прочитать what-happens-when-click-1c",
+      "done": false,
+      "priority": "low",
+      "createdAt": 1782732767347
+    },
+    {
       "id": "aca1578f-6ad5-4f7e-a41b-4245868923d9",
       "text": "Прочитать 1c-registers-book",
       "done": false,
