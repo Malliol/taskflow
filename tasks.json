@@ -3,31 +3,24 @@
   "tasks": [
     {
       "id": "seed-1",
-      "text": "�������� �����",
+      "text": "Создание задач",
       "done": true,
       "priority": "high",
       "createdAt": 1719600000000
     },
     {
       "id": "seed-2",
-      "text": "�������� � ��������-����",
+      "text": "Подвязка к прогресс-бару",
       "done": true,
       "priority": "high",
       "createdAt": 1719600100000
     },
     {
       "id": "seed-3",
-      "text": "�������� ������ � git (�������/������ tasks.json)",
+      "text": "Хранение данных в git через Cloudflare Worker",
       "done": false,
       "priority": "medium",
       "createdAt": 1719600200000
-    },
-    {
-      "id": "writetest",
-      "text": "�������� ������ ����� Worker",
-      "done": false,
-      "priority": "low",
-      "createdAt": 1719600300000
     }
   ]
 }
